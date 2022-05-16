@@ -1,1 +1,15 @@
-
+#!/bin/bash
+for i in $* ; do
+	cat patch.$i | patch -p0 wireworld-original.c
+done
+EXITSTATUS=1
+if gcc -c wireworld-original.c ; then
+    EXITSTATUS=0
+fi
+for i in $* ; do
+    cat patch.$i | patch -R -p0 wireworld-original.c
+done
+if [ $EXITSTATUS -eq 1 ] ; then
+    exit 1
+fi
+exit 0
